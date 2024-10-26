@@ -21,6 +21,20 @@ class Graph:
 
 
 def simple(N: int) -> Graph:
+    """
+    Generates a simple dataset of N points in two dimensions.
+
+    The classification function is y = 1 if x_1 < 0.5 else 0.
+
+    Parameters
+    N : int
+        The number of points to generate.
+
+    Returns
+    Graph
+        A Graph dataclass containing the X and y values of the dataset.
+    """
+
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -30,6 +44,19 @@ def simple(N: int) -> Graph:
 
 
 def diag(N: int) -> Graph:
+    """
+    Generates a diagonal dataset of N points in two dimensions.
+
+    The classification function is y = 1 if x_1 + x_2 < 0.5 else 0.
+
+    Parameters
+    N : int
+        The number of points to generate.
+
+    Returns
+    Graph
+        A Graph dataclass containing the X and y values of the dataset.
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -39,6 +66,19 @@ def diag(N: int) -> Graph:
 
 
 def split(N: int) -> Graph:
+    """
+    Generates a split dataset of N points in two dimensions.
+
+    The classification function is y = 1 if x_1 < 0.2 or x_1 > 0.8 else 0.
+
+    Parameters
+    N : int
+        The number of points to generate.
+
+    Returns
+    Graph
+        A Graph dataclass containing the X and y values of the dataset.
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -48,6 +88,19 @@ def split(N: int) -> Graph:
 
 
 def xor(N: int) -> Graph:
+    """
+    Generates an xor dataset of N points in two dimensions.
+
+    The classification function is y = 1 if (x_1 < 0.5 and x_2 > 0.5) or (x_1 > 0.5 and x_2 < 0.5) else 0.
+
+    Parameters
+    N : int
+        The number of points to generate.
+
+    Returns
+    Graph
+        A Graph dataclass containing the X and y values of the dataset.
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -57,6 +110,19 @@ def xor(N: int) -> Graph:
 
 
 def circle(N: int) -> Graph:
+    """
+    Generates a circle dataset of N points in two dimensions.
+
+    The classification function is y = 1 if x_1^2 + x_2^2 > 0.1 else 0.
+
+    Parameters
+    N : int
+        The number of points to generate.
+
+    Returns
+    Graph
+        A Graph dataclass containing the X and y values of the dataset.
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -67,6 +133,21 @@ def circle(N: int) -> Graph:
 
 
 def spiral(N: int) -> Graph:
+    """
+    Generates a spiral dataset of N points in two dimensions.
+
+    The classification function is y = 0 if the point is on the first spiral arm and y = 1
+    if the point is on the second spiral arm.
+
+    Parameters
+    N : int
+        The number of points to generate.
+
+    Returns
+    Graph
+        A Graph dataclass containing the X and y values of the dataset.
+    """
+
     def x(t: float) -> float:
         return t * math.cos(t) / 20.0
 

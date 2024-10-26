@@ -1,16 +1,7 @@
 import random
 
 import chalk as ch
-from chalk import (
-    Trail,
-    empty,
-    make_path,
-    path,
-    place_on_path,
-    rectangle,
-    unit_x,
-    unit_y,
-)
+from chalk import Trail, empty, make_path, place_on_path, rectangle, unit_x, unit_y
 from colour import Color
 from drawing import aqua, black, lightblue, lightred
 

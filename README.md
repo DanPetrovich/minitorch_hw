@@ -1,8 +1,11 @@
 # minitorch
-The full minitorch student suite. 
 
+The full minitorch student suite.
 
-To access the autograder: 
+Here is the result of Hand-create classifier:
+![result](images/Screenshot.png)
+
+To access the autograder:
 
 * Module 0: https://classroom.github.com/a/qDYKZff9
 * Module 1: https://classroom.github.com/a/6TiImUiy
