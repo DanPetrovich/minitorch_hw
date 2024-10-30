@@ -168,6 +168,9 @@ class Tensor:
 
     def __eq__(self, b: TensorLike) -> Tensor:  # type: ignore[override]
         return EQ.apply(self, self._ensure_tensor(b))
+    
+    def __hash__(self) -> int:
+        return hash(id(self))
 
     def __gt__(self, b: TensorLike) -> Tensor:
         return LT.apply(self._ensure_tensor(b), self)

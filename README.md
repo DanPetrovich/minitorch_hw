@@ -2,8 +2,17 @@
 
 The full minitorch student suite.
 
-Here is the result of Hand-create classifier:
-![result](images/Screenshot.png)
+
+Results of trainings:
+Simple dataset - 1.8237653696407827
+![result](images/Simple.png)
+XOR dataset - 23.471452000901554
+![result](images/Xor.png)
+Diag dataset - 1.6438533724645044
+![result](images/Diag.png)
+Split dataset - 8.62996728737011
+![result](images/Split.png)
+
 
 To access the autograder:
 

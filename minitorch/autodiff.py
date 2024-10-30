@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Any, Iterable, Tuple
-
+from collections import defaultdict
 from typing_extensions import Protocol
 
 # ## Task 1.1
@@ -22,8 +22,15 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     Returns:
         An approximation of $f'_i(x_0, \ldots, x_{n-1})$
     """
-    # TODO: Implement for Task 1.1.
-    raise NotImplementedError("Need to implement for Task 1.1")
+    vals_forward = list(vals)
+    vals_backward = list(vals)
+    
+    vals_forward[arg] += epsilon
+    vals_backward[arg] -= epsilon
+    
+    derivative = (f(*vals_forward) - f(*vals_backward)) / (2 * epsilon)
+    
+    return derivative   
 
 
 variable_count = 1
@@ -61,8 +68,21 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    sorted_nodes = []
+    visited = set()
+
+    def dfs(v: Variable):
+        if v.unique_id in visited or v.is_constant():
+            return
+        if not v.is_leaf():
+            for parent in v.parents:
+                if not parent.is_constant():
+                    dfs(parent)
+        visited.add(v.unique_id)
+        sorted_nodes.append(v)
+
+    dfs(variable)
+    return reversed(sorted_nodes)
 
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
@@ -76,8 +96,18 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    topo_sorted = topological_sort(variable)
+    derivatives = defaultdict(float)
+    derivatives[variable.unique_id] = deriv
+
+    for v in topo_sorted:
+        d_output = derivatives[v.unique_id]
+        if v.is_leaf():
+            v.accumulate_derivative(d_output)
+        else:
+            back = v.chain_rule(d_output)
+            for var, deriv in back:
+                derivatives[var.unique_id] += deriv
 
 
 @dataclass

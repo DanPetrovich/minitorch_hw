@@ -73,7 +73,7 @@ def sigmoid(x: float) -> float:
     for stability.
     """
 
-    return 1 / (1 + math.exp(-x)) if x >= 0 else math.exp(x) / (1 + math.exp(x))
+    return 1.0 / (1.0 + math.exp(-x)) if x >= 0 else math.exp(x) / (1.0 + math.exp(x))
 
 
 def relu(x: float) -> float:
@@ -114,7 +114,7 @@ def inv(x: float) -> float:
 def inv_back(x: float, d: float) -> float:
     r"If $f(x) = 1/x$ compute $d \times f'(x)$"
 
-    return d * (-1 / (x + EPS) ** 2)
+    return neg(d) / (x + EPS) ** 2
 
 
 def relu_back(x: float, d: float) -> float:
