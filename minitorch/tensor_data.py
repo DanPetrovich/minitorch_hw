@@ -91,7 +91,7 @@ def broadcast_index(
     offset = len(big_shape) - len(shape)
     
     for i in range(len(shape) - 1, -1, -1):
-        if shape[i] == 1:
+        if shape[i] <= 1:
             out_index[i] = 0
         else:
             out_index[i] = big_index[i + offset]
@@ -111,24 +111,28 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     Raises:
         IndexingError : if cannot broadcast
     """
+    shape1 = shape1[::-1]
+    shape2 = shape2[::-1]
     len1, len2 = len(shape1), len(shape2)
-    if len1 < len2:
-        shape1 = (1,) * (len2 - len1) + tuple(shape1)
-    elif len2 < len1:
-        shape2 = (1,) * (len1 - len2) + tuple(shape2)
 
     broadcasted_shape = []
-    for dim1, dim2 in zip(shape1, shape2):
-        if dim1 == dim2:
-            broadcasted_shape.append(dim1)
-        elif dim1 == 1:
+    for i in range(max(len1, len2)):
+        if i < len1:
+            dim1 = shape1[i]
+        else:
+            dim1 = 1
+        if i < len2:
+            dim2 = shape2[i]
+        else:
+            dim2 = 1
+        if dim1 == dim2 or dim1 == 1:
             broadcasted_shape.append(dim2)
         elif dim2 == 1:
             broadcasted_shape.append(dim1)
         else:
             raise IndexingError(f"Shapes {shape1} and {shape2} cannot be broadcast")
 
-    return tuple(broadcasted_shape)
+    return tuple(broadcasted_shape[::-1])
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:

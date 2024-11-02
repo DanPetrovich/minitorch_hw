@@ -112,16 +112,18 @@ class Sigmoid(Function):
     @staticmethod
     def forward(ctx: Context, t1: Tensor) -> Tensor:
         ctx.save_for_backward(t1)
-        out: Tensor = t1
-        t1.f.sigmoid_map(t1, out)
-        return out
+        return t1.f.sigmoid_map(t1)
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tensor:
         (t1,) = ctx.saved_tensors
         sigmoid_t1 = t1.f.sigmoid_map(t1)
-        grad = grad_output.f.mul_zip(grad_output, sigmoid_t1.f.mul_zip(sigmoid_t1, sigmoid_t1.f.add_zip(sigmoid_t1, -1)))
-        return grad
+        mul = t1.f.mul_zip(sigmoid_t1, grad_output)
+        sig_mul = t1.f.mul_zip(sigmoid_t1, sigmoid_t1)
+        return t1.f.add_zip(
+            mul,
+            t1.f.neg_map(t1.f.mul_zip(sig_mul, grad_output))
+        )
 
 
 
@@ -133,7 +135,7 @@ class ReLU(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tensor:
-        t1 = ctx.saved_tensors
+        (t1,) = ctx.saved_tensors
         return t1.f.relu_back_zip(t1, grad_output)
 
 
@@ -145,7 +147,7 @@ class Log(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tensor:
-        t1 = ctx.saved_tensors
+        (t1,) = ctx.saved_tensors
         return t1.f.log_back_zip(t1, grad_output)
 
 
@@ -157,9 +159,9 @@ class Exp(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tensor:
-        t1 = ctx.saved_tensors
+        (t1,) = ctx.saved_tensors
         exp_t1 = t1.f.exp_map(t1)
-        return grad_output.f.mul_zip(exp_t1, grad_output)
+        return t1.f.mul_zip(exp_t1, grad_output)
 
 
 class Sum(Function):
@@ -191,8 +193,7 @@ class LT(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
-        (a, b) = ctx.saved_tensors
-        zero_grad = a.zeros_like()
+        zero_grad = grad_output.zeros()
         return zero_grad, zero_grad
 
 class EQ(Function):
@@ -203,28 +204,29 @@ class EQ(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
-        (a, b) = ctx.saved_tensors
-        zero_grad = a.zeros_like()
+        zero_grad = grad_output.zeros()
         return zero_grad, zero_grad
 
 
 class IsClose(Function):
     @staticmethod
     def forward(ctx: Context, a: Tensor, b: Tensor) -> Tensor:
-        ctx.save_for_backward(a, b)
         return a.f.is_close_zip(a, b)
 
 
 class Permute(Function):
     @staticmethod
     def forward(ctx: Context, a: Tensor, order: Tensor) -> Tensor:
+        order = [int(order[i]) for i in range(order.size)]
         ctx.save_for_backward(order)
-        return a.permute(order.tolist())
+        perm = a._tensor.permute(*order)
+        return minitorch.Tensor.make(perm._storage, perm.shape, perm.strides, a.backend)
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
         (order,) = ctx.saved_values
-        inverse_order = [order.index(i) for i in range(len(order))]
-        return grad_output.permute(inverse_order), 0.0
+        inverse_order = np.argsort(order)
+        grad = grad_output._tensor.permute(*inverse_order)
+        return minitorch.Tensor.make(grad._storage, grad.shape, grad.strides, grad_output.backend), 0.0
 
 
 class View(Function):

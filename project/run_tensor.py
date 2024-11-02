@@ -4,6 +4,7 @@ Be sure you have minitorch installed in you Virtual Env.
 """
 
 import minitorch
+from time import time
 
 
 def RParam(*shape):
@@ -95,8 +96,10 @@ class TensorTrain:
 
 
 if __name__ == "__main__":
+    cur_time = time()
     PTS = 50
     HIDDEN = 2
     RATE = 0.5
-    data = minitorch.datasets["Simple"](PTS)
+    data = minitorch.datasets["Split"](PTS)
     TensorTrain(HIDDEN).train(data, RATE)
+    print(time() - cur_time)

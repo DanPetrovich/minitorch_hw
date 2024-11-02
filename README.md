@@ -3,15 +3,29 @@
 The full minitorch student suite.
 
 
-Results of trainings:
+Results of Scalar trainings:
 Simple dataset - 1.8237653696407827
 ![result](images/Simple.png)
-XOR dataset - 23.471452000901554
-![result](images/Xor.png)
 Diag dataset - 1.6438533724645044
 ![result](images/Diag.png)
 Split dataset - 8.62996728737011
 ![result](images/Split.png)
+XOR dataset - 23.471452000901554
+![result](images/Xor.png)
+
+
+Results of Scalar trainings:
+Simple dataset - 0.23788833287600702
+Time is 12.71
+
+Diag dataset - 1.0364295933251353
+Time is 12.87
+
+Split dataset - 20.5017117559040
+Time - 12.75
+
+XOR dataset - 29.420993854147564
+Time - 12.71
 
 
 To access the autograder:
