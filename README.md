@@ -28,6 +28,8 @@ XOR dataset - 29.420993854147564
 Time - 12.71
 
 
+Here is the link to Tensor Puzzlers - https://colab.research.google.com/drive/1_VY_s3Ese1Q8sN7o9oAeqHBpWBuyKHB3?usp=sharing
+
 To access the autograder:
 
 * Module 0: https://classroom.github.com/a/qDYKZff9
